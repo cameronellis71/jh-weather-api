@@ -33,6 +33,7 @@ func main() {
 	getWeather(lat, lon)
 }
 
+// getForecastUrl returns the URL from which to get the weather data.
 func getForecastUrl(latitude, longitude float64) string {
 	pointsURL := fmt.Sprintf("https://api.weather.gov/points/%f,%f", latitude, longitude)
 
@@ -54,6 +55,8 @@ func getForecastUrl(latitude, longitude float64) string {
 	return forecastURL
 }
 
+// getForecastData returns the forecast data for the given latitude &
+// longitude.
 func getForecastData(forecastURL string) ForecastResponse {
 	req2, _ := http.NewRequest("GET", forecastURL, nil)
 	req2.Header.Set("User-Agent", "your-email@example.com")
@@ -72,7 +75,18 @@ func getForecastData(forecastURL string) ForecastResponse {
 	return forecastData
 }
 
-func getWeather(latitude, longitude float64) {
+// getTemperatureCharicaterization returns the charicaterization of the
+// temperature.
+func getTemperatureCharicaterization(temperature int) string {
+	if temperature < 60 {
+		return "cold"
+	} else if temperature >= 60 && temperature <= 80 {
+		return "moderate"
+	}
+	return "hot"
+}
+
+func getWeather(latitude, longitude float64) string {
 	// Get forecast URL from /points/{lat},{lon}
 	forecastURL := getForecastUrl(latitude, longitude)
 
@@ -86,4 +100,6 @@ func getWeather(latitude, longitude float64) {
 	} else {
 		fmt.Println(periods[0].ShortForecast)
 	}
+
+	return getTemperatureCharicaterization(periods[0].Temperature)
 }
