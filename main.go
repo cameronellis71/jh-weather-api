@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"errors"
 	"fmt"
 	"io"
 	"net/http"
@@ -30,7 +31,11 @@ func main() {
 	lat := 37.7749
 	lon := -122.4194
 
-	getWeather(lat, lon)
+	resp, err := getWeather(lat, lon)
+	if err != nil {
+		panic(err)
+	}
+	fmt.Println(resp)
 }
 
 // getForecastUrl returns the URL from which to get the weather data.
@@ -77,7 +82,7 @@ func getForecastData(forecastURL string) ForecastResponse {
 
 // getTemperatureCharicaterization returns the charicaterization of the
 // temperature.
-func getTemperatureCharicaterization(temperature int) string {
+func getTempCharicaterization(temperature int) string {
 	if temperature < 60 {
 		return "cold"
 	} else if temperature >= 60 && temperature <= 80 {
@@ -86,20 +91,22 @@ func getTemperatureCharicaterization(temperature int) string {
 	return "hot"
 }
 
-func getWeather(latitude, longitude float64) string {
-	// Get forecast URL from /points/{lat},{lon}
+// getWeather returns the short forecast and charicaterizaion of the weather.
+func getWeather(latitude, longitude float64) (string, error) {
+	// Get the forecast URL from /points/{lat},{lon}
 	forecastURL := getForecastUrl(latitude, longitude)
 
-	// Get forecast data
+	// Get the forecast data
 	forecastData := getForecastData(forecastURL)
-	periods := forecastData.Properties.Periods
 
-	// Print the short forecast if one exists
-	if len(periods) <= 0 {
-		fmt.Println("No forecasts available to display")
-	} else {
-		fmt.Println(periods[0].ShortForecast)
+	periods := forecastData.Properties.Periods
+	if len(periods) == 0 {
+		return "", errors.New("no forecasts available to display")
 	}
 
-	return getTemperatureCharicaterization(periods[0].Temperature)
+	period := periods[0]
+	shortForecast := period.ShortForecast
+	tempCharicaterization := getTempCharicaterization(period.Temperature)
+
+	return shortForecast + ": " + tempCharicaterization, nil
 }
