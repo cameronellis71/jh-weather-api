@@ -30,8 +30,11 @@ func main() {
 	lat := 37.7749
 	lon := -122.4194
 
-	// Step 1: Get forecast URL from /points/{lat},{lon}
-	pointsURL := fmt.Sprintf("https://api.weather.gov/points/%f,%f", lat, lon)
+	getWeather(lat, lon)
+}
+
+func getForecastUrl(latitude, longitude float64) string {
+	pointsURL := fmt.Sprintf("https://api.weather.gov/points/%f,%f", latitude, longitude)
 
 	req, _ := http.NewRequest("GET", pointsURL, nil)
 	req.Header.Set("User-Agent", "cameronellis71@gmail.com")
@@ -48,9 +51,10 @@ func main() {
 	json.Unmarshal(body, &pointsData)
 
 	forecastURL := pointsData.Properties.Forecast
-	fmt.Println("Forecast URL:", forecastURL)
+	return forecastURL
+}
 
-	// Step 2: Get forecast data
+func getForecastData(forecastURL string) ForecastResponse {
 	req2, _ := http.NewRequest("GET", forecastURL, nil)
 	req2.Header.Set("User-Agent", "your-email@example.com")
 
@@ -64,6 +68,16 @@ func main() {
 
 	var forecastData ForecastResponse
 	json.Unmarshal(body2, &forecastData)
+
+	return forecastData
+}
+
+func getWeather(latitude, longitude float64) {
+	// Step 1: Get forecast URL from /points/{lat},{lon}
+	forecastURL := getForecastUrl(latitude, longitude)
+
+	// Step 2: Get forecast data
+	forecastData := getForecastData(forecastURL)
 
 	// Print the forecast
 	for _, period := range forecastData.Properties.Periods {
