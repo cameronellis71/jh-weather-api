@@ -73,15 +73,17 @@ func getForecastData(forecastURL string) ForecastResponse {
 }
 
 func getWeather(latitude, longitude float64) {
-	// Step 1: Get forecast URL from /points/{lat},{lon}
+	// Get forecast URL from /points/{lat},{lon}
 	forecastURL := getForecastUrl(latitude, longitude)
 
-	// Step 2: Get forecast data
+	// Get forecast data
 	forecastData := getForecastData(forecastURL)
+	periods := forecastData.Properties.Periods
 
-	// Print the forecast
-	for _, period := range forecastData.Properties.Periods {
-		fmt.Printf("%s: %d%s - %s\n",
-			period.Name, period.Temperature, period.TemperatureUnit, period.ShortForecast)
+	// Print the short forecast if one exists
+	if len(periods) <= 0 {
+		fmt.Println("No forecasts available to display")
+	} else {
+		fmt.Println(periods[0].ShortForecast)
 	}
 }
