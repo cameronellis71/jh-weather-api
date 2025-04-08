@@ -1,26 +1,16 @@
 # JH Weather API Takehome Assignment
 
 ## About
+* JH Weather API is an application that takes in latitude (lat) and longitude (long) coordinates (in decimal form) & returns the short forecast for the area and a characterization of the temperature.
 
-
-
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
-
-<!-- GETTING STARTED -->
 ## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
+To get a local copy instance and running follow these steps:
 
 ### Prerequisites
 
-This is an example of how to list things you need to use the software and how to install them.
-* npm
+* Install Golang
   ```sh
-  npm install npm@latest -g
+  brew install go
   ```
 
 ### Installation
@@ -29,23 +19,24 @@ This is an example of how to list things you need to use the software and how to
    ```sh
    git clone https://github.com/github_username/repo_name.git
    ```
-2. Install NPM packages
+2. Install program dependencies
    ```sh
-   npm install
+   go get -u github.com/gorilla/mux
+   go get github.com/stretchr/testify
+   go get github.com/jarcoal/httpmock
+   go get github.com/stretchr/testify
    ```
-3. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-4. Change git remote url to avoid accidental pushes to base project
+3. Run the program on localhost
    ```sh
-   git remote set-url origin github_username/repo_name
-   git remote -v # confirm the changes
+   go run main.go
    ```
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+```
+http://localhost:8080/getWeather/37.7749/-122.4195
 
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
+Light Rain: cold
+```
 
 _For more examples, please refer to the [Documentation](https://example.com)_
