@@ -34,6 +34,12 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, "Welcome to the Home Page!\n")
 }
 
+func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
+	vars := mux.Vars(r)
+	longitude := vars["longitude"]
+	fmt.Fprintf(w, "Longitude %s!\n", longitude)
+}
+
 func main() {
 	// lat := 37.7749
 	// lon := -122.4194
@@ -48,6 +54,7 @@ func main() {
 
 	// Define your routes and associate them with handler functions
 	r.HandleFunc("/", homeHandler).Methods("GET")
+	r.HandleFunc("/getWeather/{latitude}/{longitude}", getWeatherHandler).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", r))
 
 	fmt.Println("Server is running on http://localhost:8080")
