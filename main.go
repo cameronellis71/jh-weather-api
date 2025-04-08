@@ -44,16 +44,18 @@ func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		fmt.Println("An error occurred: ", err.Error())
 	}
-	fmt.Println(latitudeAsFloat)
 
 	longitudeAsFloat, err := strconv.ParseFloat(longitude, 64)
 	if err != nil {
 		fmt.Println("An error occurred")
 	}
-	fmt.Println(longitudeAsFloat)
 
-	fmt.Fprintf(w, "Latitude %s!\n", latitude)
-	fmt.Fprintf(w, "Longitude %s!\n", longitude)
+	resp, err := getWeather(latitudeAsFloat, longitudeAsFloat)
+	if err != nil {
+		fmt.Println("An error occurred")
+	}
+
+	fmt.Fprintf(w, "%s\n", resp)
 }
 
 func main() {
