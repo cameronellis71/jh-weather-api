@@ -41,14 +41,6 @@ func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	// lat := 37.7749
-	// lon := -122.4194
-
-	// resp, err := getWeather(lat, lon)
-	// if err != nil {
-	// 	panic(err)
-	// }
-	// fmt.Println(resp)
 	// Create a new router
 	r := mux.NewRouter()
 
