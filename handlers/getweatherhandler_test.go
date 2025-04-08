@@ -39,6 +39,54 @@ func TestGetWeatherHandlerReturnsNonEmptyStringValidInput(t *testing.T) {
 	}
 }
 
+func TestGetWeatherHandlerBadLatitudeValue(t *testing.T) {
+	// Setup the request
+	req, err := http.NewRequest("GET", "/weather/40.7128/abcde", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a ResponseRecorder to capture the response
+	rr := httptest.NewRecorder()
+
+	// Create a new router and register the handler
+	r := mux.NewRouter()
+	r.HandleFunc("/weather/{latitude}/{longitude}", GetWeatherHandler)
+
+	// Serve the HTTP request
+	r.ServeHTTP(rr, req)
+
+	// Check if the status code is what you expect
+	if rr.Code != http.StatusBadRequest {
+		t.Errorf("expected status 200 but got %v", rr.Code)
+	}
+
+}
+
+func TestGetWeatherHandlerBadLongitudeValue(t *testing.T) {
+	// Setup the request
+	req, err := http.NewRequest("GET", "/weather/abcde/-74.0060", nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+
+	// Create a ResponseRecorder to capture the response
+	rr := httptest.NewRecorder()
+
+	// Create a new router and register the handler
+	r := mux.NewRouter()
+	r.HandleFunc("/weather/{latitude}/{longitude}", GetWeatherHandler)
+
+	// Serve the HTTP request
+	r.ServeHTTP(rr, req)
+
+	// Check if the status code is what you expect
+	if rr.Code != http.StatusBadRequest {
+		t.Errorf("expected status 200 but got %v", rr.Code)
+	}
+
+}
+
 func TestGetForecastUrlHappyPath(t *testing.T) {
 	// Initialize the mock HTTP client
 	httpmock.Activate()
@@ -103,8 +151,4 @@ func TestGetTempCharicaterization(t *testing.T) {
 			}
 		})
 	}
-}
-
-func TestGetWeather(t *testing.T) {
-	// Your test code here
 }
