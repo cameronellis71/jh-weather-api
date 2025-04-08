@@ -78,6 +78,17 @@ func getForecastData(forecastURL string) models.ForecastResponse {
 	return forecastData
 }
 
+// getTempCharicaterization returns the charicaterization of the
+// temperature.
+func getTempCharicaterization(temperature int) string {
+	if temperature < 60 {
+		return "cold"
+	} else if temperature >= 60 && temperature <= 80 {
+		return "moderate"
+	}
+	return "hot"
+}
+
 // getWeather returns the short forecast and charicaterizaion of the weather.
 func getWeather(latitude, longitude float64) (string, error) {
 	// Get the forecast URL from /points/{lat},{lon}
@@ -96,15 +107,4 @@ func getWeather(latitude, longitude float64) (string, error) {
 	tempCharicaterization := getTempCharicaterization(period.Temperature)
 
 	return shortForecast + ": " + tempCharicaterization, nil
-}
-
-// getTemperatureCharicaterization returns the charicaterization of the
-// temperature.
-func getTempCharicaterization(temperature int) string {
-	if temperature < 60 {
-		return "cold"
-	} else if temperature >= 60 && temperature <= 80 {
-		return "moderate"
-	}
-	return "hot"
 }
