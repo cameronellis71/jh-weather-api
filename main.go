@@ -5,7 +5,10 @@ import (
 	"errors"
 	"fmt"
 	"io"
+	"log"
 	"net/http"
+
+	"github.com/gorilla/mux"
 )
 
 // Struct to parse JSON response from /points endpoint
@@ -27,15 +30,27 @@ type ForecastResponse struct {
 	} `json:"properties"`
 }
 
-func main() {
-	lat := 37.7749
-	lon := -122.4194
+func homeHandler(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintf(w, "Welcome to the Home Page!\n")
+}
 
-	resp, err := getWeather(lat, lon)
-	if err != nil {
-		panic(err)
-	}
-	fmt.Println(resp)
+func main() {
+	// lat := 37.7749
+	// lon := -122.4194
+
+	// resp, err := getWeather(lat, lon)
+	// if err != nil {
+	// 	panic(err)
+	// }
+	// fmt.Println(resp)
+	// Create a new router
+	r := mux.NewRouter()
+
+	// Define your routes and associate them with handler functions
+	r.HandleFunc("/", homeHandler).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8080", r))
+
+	fmt.Println("Server is running on http://localhost:8080")
 }
 
 // getForecastUrl returns the URL from which to get the weather data.
