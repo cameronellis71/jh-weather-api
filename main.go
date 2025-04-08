@@ -14,18 +14,6 @@ import (
 	"github.com/gorilla/mux"
 )
 
-// Struct to parse JSON forecast data
-type ForecastResponse struct {
-	Properties struct {
-		Periods []struct {
-			Name            string `json:"name"`
-			Temperature     int    `json:"temperature"`
-			TemperatureUnit string `json:"temperatureUnit"`
-			ShortForecast   string `json:"shortForecast"`
-		} `json:"periods"`
-	} `json:"properties"`
-}
-
 func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	latitude := vars["latitude"]
@@ -83,7 +71,7 @@ func getForecastUrl(latitude, longitude float64) string {
 
 // getForecastData returns the forecast data for the given latitude &
 // longitude.
-func getForecastData(forecastURL string) ForecastResponse {
+func getForecastData(forecastURL string) models.ForecastResponse {
 	req2, _ := http.NewRequest("GET", forecastURL, nil)
 	req2.Header.Set("User-Agent", "your-email@example.com")
 
@@ -95,7 +83,7 @@ func getForecastData(forecastURL string) ForecastResponse {
 
 	body2, _ := io.ReadAll(resp2.Body)
 
-	var forecastData ForecastResponse
+	var forecastData models.ForecastResponse
 	json.Unmarshal(body2, &forecastData)
 
 	return forecastData
