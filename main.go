@@ -9,15 +9,10 @@ import (
 	"net/http"
 	"strconv"
 
+	"jh-weather-api/models"
+
 	"github.com/gorilla/mux"
 )
-
-// Struct to parse JSON response from /points endpoint
-type PointsResponse struct {
-	Properties struct {
-		Forecast string `json:"forecast"`
-	} `json:"properties"`
-}
 
 // Struct to parse JSON forecast data
 type ForecastResponse struct {
@@ -79,7 +74,7 @@ func getForecastUrl(latitude, longitude float64) string {
 
 	body, _ := io.ReadAll(resp.Body)
 
-	var pointsData PointsResponse
+	var pointsData models.PointsResponse
 	json.Unmarshal(body, &pointsData)
 
 	forecastURL := pointsData.Properties.Forecast
