@@ -36,7 +36,9 @@ func homeHandler(w http.ResponseWriter, r *http.Request) {
 
 func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
+	latitude := vars["latitude"]
 	longitude := vars["longitude"]
+	fmt.Fprintf(w, "Latitude %s!\n", latitude)
 	fmt.Fprintf(w, "Longitude %s!\n", longitude)
 }
 
