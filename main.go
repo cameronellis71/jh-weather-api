@@ -7,6 +7,7 @@ import (
 	"io"
 	"log"
 	"net/http"
+	"strconv"
 
 	"github.com/gorilla/mux"
 )
@@ -38,6 +39,13 @@ func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	latitude := vars["latitude"]
 	longitude := vars["longitude"]
+
+	latitudeAsFloat, err := strconv.ParseFloat(latitude, 64)
+	if err != nil {
+		fmt.Println("An error ocurred: ", err.Error())
+	}
+	fmt.Println(latitudeAsFloat)
+
 	fmt.Fprintf(w, "Latitude %s!\n", latitude)
 	fmt.Fprintf(w, "Longitude %s!\n", longitude)
 }
