@@ -152,3 +152,30 @@ func TestGetTempCharicaterization(t *testing.T) {
 		})
 	}
 }
+
+func TestGetWeather_EmptyPeriods(t *testing.T) {
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	// Match any /points/{lat},{lon} URL
+	httpmock.RegisterResponder("GET", `=~^https://api.weather.gov/points/.*`,
+		httpmock.NewStringResponder(200, `{
+			"properties": {
+				"forecast": "https://api.weather.gov/gridpoints/XYZ/123,456/forecast"
+			}
+		}`))
+
+	// Mock the forecast response with empty periods
+	httpmock.RegisterResponder("GET", "https://api.weather.gov/gridpoints/XYZ/123,456/forecast",
+		httpmock.NewStringResponder(200, `{
+			"properties": {
+				"periods": []
+			}
+		}`))
+
+	result, err := getWeather(40.7128, -74.0060)
+
+	assert.NotNil(t, err)
+	assert.Equal(t, "", result)
+	assert.Equal(t, "no forecasts available to display", err.Error())
+}

@@ -32,7 +32,8 @@ func GetWeatherHandler(w http.ResponseWriter, r *http.Request) {
 
 	resp, err := getWeather(latitudeAsFloat, longitudeAsFloat)
 	if err != nil {
-		fmt.Println("An error occurred")
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
 	}
 
 	fmt.Fprintf(w, "%s\n", resp)
