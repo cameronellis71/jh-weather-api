@@ -14,6 +14,16 @@ import (
 	"github.com/gorilla/mux"
 )
 
+func main() {
+	// Create a new router
+	r := mux.NewRouter()
+
+	r.HandleFunc("/getWeather/{latitude}/{longitude}", getWeatherHandler).Methods("GET")
+	log.Fatal(http.ListenAndServe(":8080", r))
+
+	fmt.Println("Server is running on http://localhost:8080")
+}
+
 func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	latitude := vars["latitude"]
@@ -35,16 +45,6 @@ func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	fmt.Fprintf(w, "%s\n", resp)
-}
-
-func main() {
-	// Create a new router
-	r := mux.NewRouter()
-
-	r.HandleFunc("/getWeather/{latitude}/{longitude}", getWeatherHandler).Methods("GET")
-	log.Fatal(http.ListenAndServe(":8080", r))
-
-	fmt.Println("Server is running on http://localhost:8080")
 }
 
 // getForecastUrl returns the URL from which to get the weather data.
