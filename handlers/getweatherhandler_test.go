@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"fmt"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -59,11 +60,49 @@ func TestGetForecastUrlHappyPath(t *testing.T) {
 }
 
 func TestGetForecastData(t *testing.T) {
-	// Your test code here
+	// Initialize httpmock
+	httpmock.Activate()
+	defer httpmock.DeactivateAndReset()
+
+	// Set up the mock response for the forecast URL
+	httpmock.RegisterResponder("GET", "https://api.weather.gov/gridpoints/ABC/123,456/forecast",
+		httpmock.NewStringResponder(200, `{
+			"properties": {
+				"periods": [
+					{
+						"shortForecast": "Partly Cloudy",
+						"temperature": 72
+					}
+				]
+			}
+		}`))
+
+	// Call the function being tested
+	forecastData := getForecastData("https://api.weather.gov/gridpoints/ABC/123,456/forecast")
+
+	// Check that the forecast data is correct
+	assert.Equal(t, "Partly Cloudy", forecastData.Properties.Periods[0].ShortForecast)
+	assert.Equal(t, 72, forecastData.Properties.Periods[0].Temperature)
 }
 
 func TestGetTempCharicaterization(t *testing.T) {
-	// Your test code here
+	tests := []struct {
+		temperature int
+		expected    string
+	}{
+		{50, "cold"},
+		{70, "moderate"},
+		{90, "hot"},
+	}
+
+	for _, test := range tests {
+		t.Run(fmt.Sprintf("Temperature %d", test.temperature), func(t *testing.T) {
+			result := getTempCharicaterization(test.temperature)
+			if result != test.expected {
+				t.Errorf("expected %s but got %s", test.expected, result)
+			}
+		})
+	}
 }
 
 func TestGetWeather(t *testing.T) {
