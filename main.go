@@ -31,10 +31,6 @@ type ForecastResponse struct {
 	} `json:"properties"`
 }
 
-func homeHandler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Welcome to the Home Page!\n")
-}
-
 func getWeatherHandler(w http.ResponseWriter, r *http.Request) {
 	vars := mux.Vars(r)
 	latitude := vars["latitude"]
@@ -62,8 +58,6 @@ func main() {
 	// Create a new router
 	r := mux.NewRouter()
 
-	// Define your routes and associate them with handler functions
-	r.HandleFunc("/", homeHandler).Methods("GET")
 	r.HandleFunc("/getWeather/{latitude}/{longitude}", getWeatherHandler).Methods("GET")
 	log.Fatal(http.ListenAndServe(":8080", r))
 
