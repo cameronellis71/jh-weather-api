@@ -21,7 +21,7 @@ To get a local copy instance and running follow these steps:
    ```
 2. Install program dependencies
    ```sh
-   go get -u github.com/gorilla/mux
+   go get github.com/gorilla/mux
    go get github.com/stretchr/testify
    go get github.com/jarcoal/httpmock
    go get github.com/stretchr/testify
