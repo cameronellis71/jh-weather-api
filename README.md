@@ -41,5 +41,3 @@ Response in the browser:
 ```
 Light Rain: cold
 ```
-
-_For more examples, please refer to the [Documentation](https://example.com)_
