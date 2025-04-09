@@ -33,9 +33,12 @@ To get a local copy instance and running follow these steps:
 
 <!-- USAGE EXAMPLES -->
 ## Usage
+Type in the following into your web broser:
 ```
 http://localhost:8080/getWeather/37.7749/-122.4195
-
+```
+Response in the browser:
+```
 Light Rain: cold
 ```
 
